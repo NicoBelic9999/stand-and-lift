@@ -9,3 +9,6 @@ Standing, straight-back exercises with a dumbbell in each hand or two 10 kg plat
 
 ## Use it
 Open `index.html` in any browser. It works offline (videos need internet).
+
+## Android app
+Download [apk/Stand-and-Lift.apk](apk/Stand-and-Lift.apk) and open it on your phone to install.
