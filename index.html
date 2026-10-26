@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stand & Lift</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: big title, wrapped muscle filter chips, then stacked colour-blocked exercise cards that open in place. */
+:root {
+  --ink: #10151B;
+  --panel: #1B232C;
+  --line: #34414E;
+  --text: #F6F1E4;
+  --muted: #AEB9C4;
+  --coral: #FF5A47;
+  --yellow: #FFD23F;
+  --teal: #19C9B7;
+  --display: 'Anton', Impact, 'Arial Narrow', sans-serif;
+  --body: 'Barlow Semi Condensed', 'Arial Narrow', Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.35;
+  padding-block: 20px 44px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 760px; margin: 0 auto; }
+h1 {
+  font: 400 clamp(54px, 15vw, 100px)/0.9 var(--display);
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+h1 .a { color: var(--coral); }
+h1 .b { color: var(--yellow); }
+h1 .c { color: var(--teal); }
+.ver { margin: 6px 0 0; color: var(--muted); font-weight: 700; font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; }
+.sub { margin: 8px 0 0; color: var(--muted); font-size: 19px; font-weight: 500; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 14px; }
+.chip {
+  font: 400 21px/1 var(--display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 10px 13px 9px;
+  border: 2px solid var(--c);
+  background: transparent;
+  color: var(--c);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.chip small { font: 700 16px/1 var(--body); opacity: 0.8; margin-left: 5px; }
+.chip[aria-pressed="true"] { background: var(--c); color: var(--ink); }
+.c-coral { --c: var(--coral); }
+.c-yellow { --c: var(--yellow); }
+.c-teal { --c: var(--teal); }
+.c-all { --c: var(--text); }
+
+.count { margin: 0 0 10px; font-weight: 700; font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.levels { margin: 0 0 14px; }
+.levels .chip { font-size: 18px; padding: 8px 12px 7px; }
+.lvl { margin-left: 10px; font-weight: 700; font-size: 16px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+.watch {
+  display: inline-block; margin-top: 12px; padding: 10px 14px 9px; border: 2px solid var(--c); border-radius: 4px;
+  color: var(--c); text-decoration: none; font: 400 20px/1.1 var(--display); letter-spacing: 0.03em; text-transform: uppercase;
+}
+.watch small { font: 600 16px/1 var(--body); letter-spacing: 0.04em; color: var(--muted); margin-left: 8px; text-transform: none; }
+.watch:hover { background: var(--c); color: var(--ink); }
+.watch:hover small { color: var(--ink); }
+.list { display: grid; gap: 10px; }
+.card { background: var(--panel); border-radius: 4px; overflow: hidden; }
+.card.first { outline: 4px solid var(--yellow); outline-offset: 2px; }
+.first-tag { display: inline-block; margin-bottom: 6px; background: var(--ink); color: var(--yellow); font: 400 17px/1 var(--display); letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 8px 4px; border-radius: 3px; }
+.firstbox { margin: 18px 0 4px; padding: 14px 16px; background: var(--yellow); color: var(--ink); border-radius: 4px; }
+.firstbox h2 { margin: 0 0 6px; font: 400 30px/1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; }
+.firstbox p { margin: 0; font-size: 19px; font-weight: 600; }
+.setrule { display: flex; align-items: center; gap: 14px; margin: 16px 0 0; padding: 10px 16px; background: var(--coral); color: var(--ink); border-radius: 4px; font: 400 34px/1 var(--display); letter-spacing: 0.03em; }
+.setrule .big { font-size: 72px; line-height: 0.9; }
+.setrule small { display: block; margin-top: 4px; font: 700 18px/1.1 var(--body); letter-spacing: 0.04em; text-transform: uppercase; }
+.headsets { display: inline-block; margin-top: 8px; background: var(--ink); color: var(--coral); font: 400 22px/1 var(--display); letter-spacing: 0.04em; padding: 6px 10px 5px; border-radius: 3px; }
+.random { display: block; width: 100%; margin: 12px 0 0; padding: 14px 16px 12px; border: 0; border-radius: 4px; background: var(--teal); color: var(--ink); font: 400 28px/1 var(--display); letter-spacing: 0.03em; text-transform: uppercase; cursor: pointer; }
+.random:active { transform: scale(0.98); }
+.firstbox .next { margin-top: 8px; padding-top: 8px; border-top: 2px dashed var(--ink); font-weight: 500; }
+.head { display: grid; grid-template-columns: minmax(0, 1fr) auto; background: var(--c); color: var(--ink); }
+.toggle {
+  display: block; width: 100%; text-align: left; background: none; border: 0; color: inherit; font: inherit;
+  padding: 13px 8px 13px 16px; cursor: pointer; min-width: 0;
+}
+.name { display: block; font: 400 clamp(28px, 7.5vw, 38px)/1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.meta { display: block; margin-top: 4px; font-weight: 700; font-size: 16px; text-transform: uppercase; letter-spacing: 0.07em; opacity: 0.8; }
+.star { background: none; border: 0; color: var(--ink); font-size: 32px; line-height: 1; padding: 0 18px; cursor: pointer; }
+.body { padding: 14px 16px 18px; }
+.sets {
+  display: inline-block; background: var(--c); color: var(--ink); font-weight: 700; font-size: 17px; line-height: 1;
+  padding: 7px 10px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.body ol { margin: 14px 0; padding-left: 1.5em; }
+.body li { margin: 0 0 8px; padding-left: 4px; font-size: 19px; }
+.body li::marker { color: var(--c); font-weight: 700; }
+.tip { border-top: 2px dashed var(--line); padding-top: 12px; font-size: 18px; }
+.tip b { color: var(--c); text-transform: uppercase; letter-spacing: 0.08em; margin-right: 6px; }
+.note { margin: 18px 0 0; color: var(--muted); font-size: 17px; font-weight: 500; }
+.empty { padding: 22px 16px; background: var(--panel); border-radius: 4px; font-size: 20px; }
+button:focus-visible { outline: 3px solid var(--text); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1><span class="a">Stand</span> <span class="b">&amp;</span> <span class="c">Lift</span></h1>
+  <p class="ver">Version 1</p>
+  <p class="sub">Standing exercises with a dumbbell in each hand. Tap a muscle, tap an exercise, tap the star to pin it.</p>
+  <div class="setrule"><span class="big">4</span><span>SETS MINIMUM<small>Every exercise. No exceptions.</small></span></div>
+  <div class="firstbox"><h2>Do these first</h2><p>1. Overhead Extension · 2. Hammer Curl · 3. Curl With Supination · 4. Reverse Curl</p></div>
+  <button class="random" id="random">🎲 Random exercise</button>
+  <div class="chips" id="chips"></div>
+  <p class="count" id="count"></p>
+  <div class="list" id="list"></div>
+  <p class="note">Heavy, explosive and overhead moves: start light and breathe steadily. If you are recovering from surgery or an injury, follow your doctor's rules first.</p>
+</div>
+
+<script>
+var GROUPS = [
+  { id: 'chest', name: 'Chest', c: 'coral' },
+  { id: 'shoulders', name: 'Shoulders', c: 'yellow' },
+  { id: 'back', name: 'Back', c: 'teal' },
+  { id: 'biceps', name: 'Biceps', c: 'coral' },
+  { id: 'brachialis', name: 'Brachialis', c: 'yellow' },
+  { id: 'forearms', name: 'Forearms', c: 'teal' },
+  { id: 'triceps', name: 'Triceps', c: 'coral' },
+  { id: 'legs', name: 'Legs', c: 'yellow' },
+  { id: 'glutes', name: 'Glutes & Hams', c: 'teal' },
+  { id: 'core', name: 'Core', c: 'coral' },
+  { id: 'full', name: 'Full Body', c: 'yellow' },
+  { id: 'wacky', name: 'Wacky', c: 'teal' }
+];
+
+var EX = [
+  { id: 'squeeze', g: 'chest', name: 'Squeeze Press', also: 'Inner chest, triceps', sets: '4 × 12',
+    steps: ['Hold the dumbbells together at your chest, palms facing each other.', 'Press straight out in front while pushing the dumbbells into each other.', 'Pull back to your chest slowly.'],
+    tip: 'Keep squeezing the whole set. That squeeze is what works the chest.' },
+  { id: 'fly', g: 'chest', name: 'Standing Fly', also: 'Chest, front shoulders', sets: '4 × 12–15',
+    steps: ['Arms out to the sides at chest height, elbows slightly bent.', 'Bring the dumbbells together in front of you in a wide arc.', 'Open back out slowly.'],
+    tip: 'Go lighter than you think. Standing up, your shoulders tire first.' },
+
+  { id: 'ohp', g: 'shoulders', name: 'Overhead Press', also: 'Shoulders, triceps', sets: '4 × 8–10',
+    steps: ['Dumbbells at shoulder height, palms facing forward.', 'Press straight up until your arms are straight.', 'Lower to your shoulders slowly.'],
+    tip: 'Squeeze your glutes and keep your ribs down so your back does not arch.' },
+  { id: 'lateral', g: 'shoulders', name: 'Lateral Raise', also: 'Side shoulders', sets: '4 × 12–15',
+    steps: ['Dumbbells at your sides, elbows slightly bent.', 'Raise both arms out to the sides up to shoulder height.', 'Lower over 3 seconds.'],
+    tip: 'Lead with your elbows, not your hands. Stop at shoulder height.' },
+  { id: 'front', g: 'shoulders', name: 'Front Raise', also: 'Front shoulders', sets: '4 × 12',
+    steps: ['Dumbbells in front of your thighs, palms down.', 'Raise both straight ahead to shoulder height.', 'Lower slowly.'],
+    tip: 'No swinging. If you need momentum, the weight is too heavy.' },
+  { id: 'arnold', g: 'shoulders', name: 'Arnold Press', also: 'All three shoulder heads', sets: '4 × 10',
+    steps: ['Start with dumbbells at your chest, palms facing you.', 'Rotate your palms outward as you press overhead.', 'Reverse the rotation on the way down.'],
+    tip: 'A slow rotation is where the extra work comes from.' },
+  { id: 'upright', g: 'shoulders', name: 'Upright Row', also: 'Side shoulders, traps', sets: '4 × 10–12',
+    steps: ['Dumbbells in front of your thighs, palms facing you.', 'Pull up toward your chin with the elbows leading.', 'Stop at chest height, then lower slowly.'],
+    tip: 'Keep the dumbbells close to your body the whole way.' },
+
+  { id: 'shrug', g: 'back', name: 'Shrug', also: 'Traps', sets: '4 × 15',
+    steps: ['Dumbbells at your sides, standing tall.', 'Lift your shoulders straight up toward your ears.', 'Hold 1 second, then lower.'],
+    tip: 'Straight up and down. Do not roll your shoulders.' },
+
+  { id: 'supcurl', g: 'biceps', name: 'Curl With Supination', also: 'Biceps', sets: '4 × 10–12',
+    steps: ['Palms facing each other at your sides.', 'Curl up while rotating your palms upward.', 'Lower slowly back to the start.'],
+    tip: 'Elbows pinned to your sides. The twist is what hits the biceps hardest.' },
+  { id: 'zottman', g: 'biceps', name: 'Zottman Curl', also: 'Biceps, forearms', sets: '4 × 10',
+    steps: ['Curl up with palms facing up.', 'At the top, rotate your palms to face down.', 'Lower slowly with palms down, then rotate back at the bottom.'],
+    tip: 'The slow lowering phase is the part that works the forearms.' },
+
+  { id: 'hammer', g: 'brachialis', name: 'Hammer Curl', also: 'Brachialis, forearms', sets: '4 × 10–12',
+    steps: ['Palms facing each other, dumbbells at your sides.', 'Curl up without turning your wrists.', 'Lower slowly.'],
+    tip: 'Keep your wrists neutral the whole time, like holding a hammer.' },
+  { id: 'xbody', g: 'brachialis', name: 'Cross-Body Hammer Curl', also: 'Brachialis, biceps', sets: '4 × 10',
+    steps: ['Palms facing in, dumbbells at your sides.', 'Curl one dumbbell across your body toward the opposite shoulder.', 'Lower and alternate arms.'],
+    tip: 'Keep your upper arm still. Only the forearm moves.' },
+
+  { id: 'revcurl', g: 'forearms', name: 'Reverse Curl', also: 'Forearms, brachialis', sets: '4 × 12',
+    steps: ['Hold the dumbbells with palms facing down.', 'Curl up with your elbows pinned to your sides.', 'Lower slowly.'],
+    tip: 'Use less weight than a normal curl. This grip is weaker.' },
+  { id: 'farmer', g: 'forearms', name: 'Farmer’s Carry', also: 'Grip, forearms, traps', sets: '4 × 30–40 sec',
+    steps: ['Pick up heavy dumbbells and stand tall, shoulders back.', 'Walk slowly with short steps.', 'Set them down when your grip starts to slip.'],
+    tip: 'Squeeze the handles as hard as you can the whole time.' },
+
+  { id: 'ohext', g: 'triceps', name: 'Overhead Extension', also: 'Triceps', sets: '4 × 10–12',
+    steps: ['Both dumbbells overhead, arms straight.', 'Lower them slowly until your elbows bend to about 90°.', 'Press back up until your arms are straight.'],
+    tip: 'Keep your elbows close to your head and your core tight.' },
+
+  { id: 'calf', g: 'legs', name: 'Calf Raise', also: 'Calves', sets: '4 × 15–20',
+    steps: ['Dumbbells at your sides, standing tall.', 'Rise onto your toes as high as you can.', 'Hold 1 second, then lower slowly.'],
+    tip: 'Get a full stretch at the bottom of every rep.' },
+
+
+  { id: 'twist', g: 'core', name: 'Standing Twist', also: 'Obliques', sets: '4 × 20 total',
+    steps: ['Hold the dumbbells at chest height with your elbows bent.', 'Rotate your torso to one side, keeping your hips facing front.', 'Rotate to the other side.'],
+    tip: 'Turn from your ribs, not your arms.' },
+  { id: 'ohhold', g: 'core', name: 'Overhead Hold', also: 'Core, shoulders', sets: '4 × 30 sec',
+    steps: ['Press both dumbbells overhead until your arms are straight.', 'Keep your ribs down and your glutes tight.', 'Breathe steadily and hold.'],
+    tip: 'If your back starts to arch, lower the weight.' },
+
+
+  { id: 'plhold', g: 'forearms', name: 'Plate Farmer’s Hold', also: '10 kg plates · Grip, forearms, traps', sets: '4 × 20–45 sec',
+    steps: ['Hold one 10 kg plate in each hand at your sides.', 'Stand tall with your shoulders level and do not lean.', 'Hold, then set the plates down before your grip gives out.'],
+    tip: 'Keep your breathing steady. Do not hold your breath.' },
+  { id: 'plpinch', g: 'forearms', name: 'Plate Pinch Hold', also: '10 kg plates · Fingers, grip', sets: '4 × 10–30 sec',
+    steps: ['Pinch each plate by its edge between your fingers and thumb.', 'Hold them at your sides without letting them slip.', 'Set them down as soon as your fingers start to slide.'],
+    tip: 'Much harder than a normal hold. Start with a few seconds, and only if the plate edges are safe to grip.' },
+  { id: 'plshrug', g: 'back', name: 'Plate Shrug', also: '10 kg plates · Traps, upper back', sets: '4 × 12–20',
+    steps: ['Hold one plate in each hand at your sides.', 'Lift your shoulders straight up toward your ears.', 'Pause for a second, then lower slowly.'],
+    tip: 'Straight up and down. Do not roll your shoulders.' },
+  { id: 'plbrace', g: 'core', name: 'Plate Brace Hold', also: '10 kg plates · Core, grip, posture', sets: '4 × 20–30 sec',
+    steps: ['Hold one plate in each hand at your sides.', 'Tighten your stomach gently and stay upright.', 'Do not lean to either side.'],
+    tip: 'Brace gently and keep breathing. Do not hold your breath.' },
+
+  { id: 'dragcurl', g: 'biceps', name: 'Drag Curl', also: 'Biceps, outer head', sets: '4 × 10',
+    steps: ['Dumbbells at your sides, palms forward.', 'Curl by pulling your elbows back so the dumbbells drag up your body.', 'Lower slowly.'],
+    tip: 'Your elbows go back, not forward. Keep the dumbbells close to your body.' },
+
+  { id: 'thruster', g: 'full', name: 'Thruster', also: 'Legs, shoulders, core', sets: '4 × 8–10',
+    steps: ['Hold the dumbbells at your shoulders, feet shoulder-width apart.', 'Squat down until your thighs are about parallel.', 'Drive up out of the squat and press the dumbbells overhead in one smooth motion.'],
+    tip: 'Let the leg drive launch the press. Start lighter than your overhead press weight.' },
+  { id: 'curlpress', g: 'full', name: 'Curl to Press', also: 'Biceps, shoulders', sets: '4 × 8–10',
+    steps: ['Dumbbells at your sides, palms forward.', 'Curl both up to your shoulders.', 'Press them overhead, then lower back down to your sides in one slow path.'],
+    tip: 'No swinging. If your back arches on the press, use lighter weights.' },
+
+  { id: 'cuban', g: 'wacky', name: 'Cuban Press', also: 'Rotator cuffs, shoulders', sets: '4 × 8, light',
+    steps: ['Hold dumbbells in front of your thighs, palms facing you.', 'Pull your elbows up high like an upright row.', 'Rotate your forearms up so the dumbbells point to the ceiling, press overhead, then reverse every step.'],
+    tip: 'Very light weights. This one is about control, not load.' },
+  { id: 'boxing', g: 'wacky', name: 'Dumbbell Shadow Boxing', also: 'Shoulders, core, cardio', sets: '4 × 45 sec',
+    steps: ['Stand in a staggered stance with light dumbbells in your fists.', 'Throw alternating straight punches forward at chest height.', 'Pull each punch back fast and keep your elbows soft.'],
+    tip: 'Use the lightest dumbbells you own and never snap your elbows straight.' },
+  { id: 'tiptoe', g: 'wacky', name: 'Tiptoe Walk', also: 'Calves, balance', sets: '4 × 30 sec',
+    steps: ['Hold dumbbells at your sides and rise onto your toes.', 'Walk in small steps without letting your heels drop.', 'Turn around and walk back.'],
+    tip: 'Look at a fixed point to stay balanced.' },
+  { id: 'oneleg', g: 'wacky', name: 'One-Leg Curl', also: 'Biceps, balance', sets: '4 × 10 each leg',
+    steps: ['Stand on one leg with the dumbbells at your sides.', 'Curl both dumbbells up without rocking.', 'Lower slowly, then switch legs.'],
+    tip: 'The wobble is the point. Your core works to keep you steady.' },
+
+  { id: 'svend', g: 'chest', name: 'Svend Press', also: '10 kg plates · Inner chest, front shoulders', sets: '4 × 12',
+    steps: ['Press the two plates together between your palms at chest height.', 'Push them straight out in front while squeezing them together hard.', 'Bring them back to your chest slowly, still squeezing.'],
+    tip: 'The squeeze is the exercise. If the plates slide apart, you relaxed.' },
+
+  { id: 'lowhigh', g: 'chest', name: 'Low-to-High Fly', also: 'Upper chest, front shoulders', sets: '4 × 12–15',
+    steps: ['Dumbbells by your hips, palms facing forward, elbows slightly bent.', 'Sweep both arms up and in until the dumbbells meet at face height.', 'Lower slowly along the same arc.'],
+    tip: 'Light weights. Think of hugging upward, not lifting.' },
+
+  { id: 'seesaw', g: 'shoulders', name: 'Seesaw Press', also: 'Shoulders, triceps, core', sets: '4 × 8 each arm',
+    steps: ['Dumbbells at shoulder height.', 'Press one arm up while the other stays at your shoulder.', 'Lower it as you press the other one up.'],
+    tip: 'Stay tall. Do not lean away from the pressing arm.' },
+
+  { id: 'lu', g: 'shoulders', name: 'Lu Raise', also: 'Side shoulders, upper traps', sets: '4 × 10',
+    steps: ['Dumbbells at your sides, thumbs pointing up.', 'Raise straight arms out to the sides and keep going all the way overhead.', 'Lower slowly the same way.'],
+    tip: 'Go very light. The last part overhead is much harder than it looks.' },
+
+  { id: 'scarecrow', g: 'shoulders', name: 'Scarecrow', also: 'Rotator cuffs, rear shoulders', sets: '4 × 10, light',
+    steps: ['Lift your elbows out to shoulder height, bent 90°, forearms pointing down.', 'Rotate your forearms up until they point to the ceiling.', 'Rotate back down slowly.'],
+    tip: 'Elbows stay at shoulder height the whole time. Use 1–3 kg.' },
+
+  { id: 'latiso', g: 'shoulders', name: 'Lateral Raise Hold', also: 'Side shoulders', sets: '4 × 20–30 sec',
+    steps: ['Raise the dumbbells out to the sides to shoulder height.', 'Hold them there with your elbows slightly bent.', 'Lower slowly when time is up.'],
+    tip: 'Shoulders down away from your ears while you hold.' },
+
+  { id: 'frontiso', g: 'shoulders', name: 'Front Raise Hold', also: 'Front shoulders, core', sets: '4 × 20–30 sec',
+    steps: ['Raise both dumbbells straight in front to shoulder height.', 'Hold them still with your ribs down.', 'Lower slowly when time is up.'],
+    tip: 'Do not lean back to make it easier.' },
+
+  { id: 'atw', g: 'shoulders', name: 'Lateral-to-Front Raise', also: 'Side and front shoulders', sets: '4 × 10',
+    steps: ['Raise the dumbbells out to the sides to shoulder height.', 'Sweep them around to the front, still at shoulder height.', 'Lower from the front, then start again at your sides.'],
+    tip: 'Keep the dumbbells at shoulder height as they travel.' },
+
+  { id: 'yraise', g: 'shoulders', name: 'Standing Y Raise', also: 'Shoulders, lower traps', sets: '4 × 12, light',
+    steps: ['Dumbbells in front of your thighs, thumbs up.', 'Raise your arms up and out into a Y shape above your head.', 'Lower slowly.'],
+    tip: 'Stand tall. Light weights only.' },
+
+  { id: 'ohshrug', g: 'back', name: 'Overhead Shrug', also: 'Upper traps, shoulders', sets: '4 × 12',
+    steps: ['Press both dumbbells overhead with straight arms.', 'Shrug your shoulders up toward your ears without bending your elbows.', 'Lower your shoulders and repeat.'],
+    tip: 'Lighter than a normal shrug. Keep your ribs down.' },
+
+  { id: 'widecurl', g: 'biceps', name: 'Wide Curl', also: 'Biceps, inner head', sets: '4 × 10–12',
+    steps: ['Hold the dumbbells slightly out to the sides, palms forward.', 'Curl up while keeping them wide.', 'Lower slowly.'],
+    tip: 'Elbows stay at your sides. Only the hands go wide.' },
+
+  { id: 'closecurl', g: 'biceps', name: 'Close-Grip Curl', also: 'Biceps, outer head', sets: '4 × 10–12',
+    steps: ['Hold the dumbbells together in front of you, palms up.', 'Curl them up while keeping them touching.', 'Lower slowly.'],
+    tip: 'Keep your elbows pinned and the dumbbells touching.' },
+
+  { id: 'isocurl', g: 'biceps', name: 'Curl Hold', also: 'Biceps, brachialis', sets: '4 × 20–30 sec',
+    steps: ['Curl the dumbbells up until your elbows are bent 90°.', 'Hold them there without moving.', 'Lower slowly when time is up.'],
+    tip: 'Squeeze hard. Do not let your elbows drift forward.' },
+
+  { id: 'c21', g: 'biceps', name: '21s Curl', also: 'Biceps, full range', sets: '4 × 21',
+    steps: ['Do 7 curls from the bottom to halfway.', 'Do 7 curls from halfway to the top.', 'Finish with 7 full curls.'],
+    tip: 'Use about 70% of your normal curl weight.' },
+
+  { id: 'hammerpress', g: 'full', name: 'Hammer Curl to Press', also: 'Brachialis, shoulders', sets: '4 × 8–10',
+    steps: ['Palms facing each other, dumbbells at your sides.', 'Hammer curl up to your shoulders.', 'Press overhead, then lower back to your shoulders and down.'],
+    tip: 'Keep your palms facing each other the whole way.' },
+
+  { id: 'pinchcurl', g: 'forearms', name: 'Plate Pinch Curl', also: '10 kg plates · Fingers, forearms, biceps', sets: '4 × 6–8',
+    steps: ['Pinch each plate by its edge, plates hanging at your sides.', 'Curl them up without letting them slip.', 'Lower slowly and keep pinching.'],
+    tip: 'Very hard on grip. Stop the set the moment a plate starts to slide.' },
+
+  { id: 'saext', g: 'triceps', name: 'Single-Arm Overhead Extension', also: 'Triceps, long head', sets: '4 × 10 each arm',
+    steps: ['Hold one dumbbell straight overhead, the other at your side.', 'Lower it behind your head until your elbow bends about 90°.', 'Straighten your arm, finish the reps, then switch.'],
+    tip: 'Your elbow points to the ceiling and stays there.' },
+
+  { id: 'btbwrist', g: 'forearms', name: 'Behind-the-Back Wrist Curl', also: 'Forearm flexors', sets: '4 × 15',
+    steps: ['Hold the dumbbells behind your thighs, palms facing back.', 'Curl your wrists up toward your forearms.', 'Lower slowly and let the dumbbells roll toward your fingers.'],
+    tip: 'Only your wrists move. Arms stay straight.' },
+
+  { id: 'radial', g: 'forearms', name: 'Radial Deviation', also: 'Thumb-side forearm', sets: '4 × 15',
+    steps: ['Hold the dumbbells at your sides like hammers, thumbs forward.', 'Tilt the front end of the dumbbells up using only your wrists.', 'Lower slowly.'],
+    tip: 'Light weights. Holding the end of the handle makes it harder.' },
+
+  { id: 'ulnar', g: 'forearms', name: 'Ulnar Deviation', also: 'Pinky-side forearm', sets: '4 × 15',
+    steps: ['Hold the dumbbells at your sides, thumbs forward.', 'Tilt the back end of the dumbbells up behind you using only your wrists.', 'Lower slowly.'],
+    tip: 'Arms stay straight and still.' },
+
+  { id: 'wristrot', g: 'forearms', name: 'Wrist Twist', also: 'Forearm rotators', sets: '4 × 10 each way',
+    steps: ['Elbows by your sides, bent 90°, dumbbells pointing up.', 'Rotate your palms down, then all the way up.', 'Move slowly in both directions.'],
+    tip: 'Hold the dumbbells off-center to make it harder.' },
+
+  { id: 'finger', g: 'forearms', name: 'Finger Curl', also: 'Fingers, grip', sets: '4 × 15',
+    steps: ['Hold the dumbbells at your sides.', 'Let them roll down to your fingertips.', 'Curl your fingers to roll them back into a full grip.'],
+    tip: 'Go slow. Do not drop them.' },
+
+  { id: 'headpinch', g: 'forearms', name: 'Dumbbell Head Pinch Hold', also: 'Fingers, thumb, grip', sets: '4 × 15–30 sec',
+    steps: ['Grab each dumbbell by its end, not the handle, with fingers and thumb.', 'Hold them at your sides.', 'Set them down before they slip.'],
+    tip: 'Use dumbbells with flat ends.' },
+
+  { id: 'offset', g: 'core', name: 'Offset Farmer’s Hold', also: 'Obliques, grip', sets: '4 × 30 sec each side',
+    steps: ['Hold a heavy dumbbell in one hand and a light one in the other.', 'Stand tall and level. Do not lean toward the heavy side.', 'Switch hands and repeat.'],
+    tip: 'Your shoulders stay level. That is the whole exercise.' },
+
+  { id: 'march', g: 'core', name: 'Farmer’s March', also: 'Core, hips, grip', sets: '4 × 30 sec',
+    steps: ['Hold the dumbbells at your sides and stand tall.', 'Lift one knee to hip height, then lower it.', 'Alternate legs in place, slowly.'],
+    tip: 'Do not lean back as your knee comes up.' },
+
+  { id: 'rack', g: 'core', name: 'Front Rack Hold', also: 'Core, upper back', sets: '4 × 30 sec',
+    steps: ['Hold the dumbbells at your shoulders, elbows pointing forward.', 'Stand tall with your ribs down.', 'Breathe steadily and hold.'],
+    tip: 'If your lower back starts to arch, lower the weight.' },
+
+  { id: 'kneeraise', g: 'core', name: 'Standing Knee Raise', also: 'Lower abs, hip flexors', sets: '4 × 10 each leg',
+    steps: ['Hold the dumbbells at your sides.', 'Raise one knee as high as you can while staying tall.', 'Lower slowly and switch.'],
+    tip: 'Pull the knee up with your stomach, not by leaning back.' },
+
+  { id: 'ohmarch', g: 'core', name: 'Overhead March', also: 'Core, shoulders, hips', sets: '4 × 30 sec',
+    steps: ['Press both dumbbells overhead and lock your arms.', 'March in place, lifting each knee to hip height.', 'Keep the dumbbells still above your head.'],
+    tip: 'Light weights. Ribs down, glutes tight.' },
+
+  { id: 'tib', g: 'legs', name: 'Tibialis Raise', also: 'Shins', sets: '4 × 15–20',
+    steps: ['Hold the dumbbells at your sides, heels on the floor.', 'Lift your toes as high as you can.', 'Lower slowly.'],
+    tip: 'Lean your back on a wall if you lose balance.' },
+
+  { id: 'slcalf', g: 'legs', name: 'Single-Leg Calf Raise', also: 'Calves', sets: '4 × 12 each leg',
+    steps: ['Stand on one foot holding the dumbbells.', 'Rise onto your toes as high as you can.', 'Lower slowly, finish the reps, then switch.'],
+    tip: 'Hold a wall with a fingertip if you wobble.' },
+
+  { id: 'calfvar', g: 'legs', name: 'Toes-In / Toes-Out Calf Raise', also: 'Inner and outer calves', sets: '4 × 15 each way',
+    steps: ['Do one set of calf raises with toes pointed out.', 'Do one set with toes pointed in.', 'Rise high and lower slowly every rep.'],
+    tip: 'Small angle changes are enough. Do not twist your knees.' },
+
+  { id: 'ohpunch', g: 'wacky', name: 'Overhead Punches', also: 'Shoulders, triceps, cardio', sets: '4 × 30 sec',
+    steps: ['Light dumbbells at shoulder height.', 'Punch one up toward the ceiling, then the other, quickly.', 'Keep going without locking your elbows hard.'],
+    tip: 'Lightest dumbbells you own. Speed over weight.' },
+
+  { id: 'circles', g: 'wacky', name: 'Dumbbell Arm Circles', also: 'Shoulders', sets: '4 × 30 sec each way',
+    steps: ['Hold light dumbbells out to the sides at shoulder height.', 'Make small circles forward.', 'Switch to backward circles.'],
+    tip: 'Keep the circles small and the arms straight.' },
+
+  { id: 'slpress', g: 'wacky', name: 'Single-Leg Overhead Press', also: 'Shoulders, balance, core', sets: '4 × 8 each leg',
+    steps: ['Stand on one leg with dumbbells at your shoulders.', 'Press them overhead without wobbling.', 'Lower slowly, finish the reps, then switch legs.'],
+    tip: 'Use less weight than your normal press.' },
+
+  { id: 'pllat', g: 'shoulders', name: 'Plate Pinch Lateral Raise', also: '10 kg plates · Side shoulders, grip', sets: '4 × 8–10',
+    steps: ['Pinch one plate in each hand by its edge, at your sides.', 'Raise both out to the sides up to shoulder height.', 'Lower slowly without letting the plates slip.'],
+    tip: 'Stop the set the moment your grip slips. Grip usually fails before the shoulders.' },
+
+  { id: 'plfront', g: 'shoulders', name: 'Plate Front Raise', also: 'Plate · Front shoulders', sets: '4 × 10–12',
+    steps: ['Hold one plate with both hands at the sides of the rim, in front of your thighs.', 'Raise it straight ahead to eye level with your arms almost straight.', 'Lower slowly.'],
+    tip: 'No leaning back. Ribs down, glutes tight.' },
+
+  { id: 'halo', g: 'shoulders', name: 'Plate Halo', also: 'Plate · Shoulders, upper back, core', sets: '4 × 6 each way',
+    steps: ['Hold one plate by the rim with both hands at chest height.', 'Circle it around your head, close to your neck.', 'Change direction after each set of reps.'],
+    tip: 'Keep your hips and ribs still. Only your arms move.' },
+
+  { id: 'busdriver', g: 'shoulders', name: 'Bus Driver', also: 'Plate · Front shoulders, rotator cuffs', sets: '4 × 30 sec',
+    steps: ['Hold one plate by the rim with both hands, arms straight in front at shoulder height.', 'Turn it left and right like a steering wheel.', 'Keep your arms up the whole time.'],
+    tip: 'Do not let your arms sink. Lighter is fine.' },
+
+  { id: 'plpress', g: 'shoulders', name: 'Standing Plate Press', also: 'Plate · Shoulders, triceps, core', sets: '4 × 10',
+    steps: ['Hold one plate with both hands at chest height.', 'Press it straight up overhead until your arms are straight.', 'Lower it back to your chest slowly.'],
+    tip: 'Squeeze the plate as you press. Do not arch your back.' },
+
+  { id: 'plupright', g: 'shoulders', name: 'Plate Upright Row', also: 'Plate · Side shoulders, traps', sets: '4 × 10–12',
+    steps: ['Hold one plate with both hands in front of your thighs.', 'Pull it up toward your chest with your elbows leading.', 'Stop at chest height, then lower slowly.'],
+    tip: 'Keep the plate close to your body.' },
+
+  { id: 'plhammer', g: 'forearms', name: 'Plate Hammer Curl', also: '10 kg plates · Brachialis, forearms, grip', sets: '4 × 8–10',
+    steps: ['Hold one plate in each hand by the top of the rim, like a hammer grip.', 'Curl both up without turning your wrists.', 'Lower slowly.'],
+    tip: 'The thick rim works your grip much harder than a dumbbell handle.' },
+
+  { id: 'pltwist', g: 'core', name: 'Standing Plate Twist', also: 'Plate · Obliques', sets: '4 × 20 total',
+    steps: ['Hold one plate in front of your chest with both hands.', 'Rotate your upper body to one side, hips facing forward.', 'Rotate to the other side.'],
+    tip: 'Keep your chest facing forward and turn from the ribs, so your torso does not just follow the plate.' },
+
+  { id: 'plohhold', g: 'core', name: 'Overhead Plate Hold', also: 'Plate · Core, shoulders', sets: '4 × 30 sec',
+    steps: ['Press one plate overhead with both hands until your arms are straight.', 'Ribs down, glutes tight, stand tall.', 'Breathe steadily and hold. Walk slowly if you want it harder.'],
+    tip: 'If your lower back arches, lower the plate.' },
+
+  { id: 'scott', g: 'shoulders', name: 'Scott Press', also: 'Side and front shoulders', sets: '4 × 10',
+    steps: ['Dumbbells at shoulder height, palms facing forward, elbows pointing out to the sides.', 'Press up and slightly out in an arc until your arms are almost straight.', 'Lower slowly back to shoulder height.'],
+    tip: 'Keep your elbows wide the whole time. Lighter than a normal press.' },
+
+  { id: 'sixway', g: 'shoulders', name: '6-Way Shoulder Raise', also: 'All three shoulder heads', sets: '4 × 6',
+    steps: ['Raise the dumbbells out to the sides to shoulder height.', 'Bring them together in front, then raise them overhead.', 'Reverse every step back down: front, sides, then to your thighs.'],
+    tip: 'Very light weights. One full trip counts as one rep.' },
+
+  { id: 'bentlat', g: 'shoulders', name: 'Bent-Arm Lateral Raise', also: 'Side shoulders', sets: '4 × 12',
+    steps: ['Hold the dumbbells at your sides and bend your elbows to 90°.', 'Raise your elbows out to the sides up to shoulder height.', 'Lower slowly.'],
+    tip: 'Lift with the elbows. Bent arms let you use more weight than straight arms.' },
+
+  { id: 'neutralohp', g: 'shoulders', name: 'Neutral-Grip Overhead Press', also: 'Shoulders, triceps', sets: '4 × 8–10',
+    steps: ['Hold the dumbbells at your shoulders with palms facing each other.', 'Press straight up until your arms are straight.', 'Lower slowly back to your shoulders.'],
+    tip: 'Easier on the shoulder joint than palms-forward pressing.' },
+
+  { id: 'xfront', g: 'shoulders', name: 'Cross-Body Front Raise', also: 'Front shoulders, upper chest', sets: '4 × 10 each arm',
+    steps: ['Dumbbells in front of your thighs.', 'Raise one arm up and across your body to the opposite shoulder height.', 'Lower slowly and alternate arms.'],
+    tip: 'Do not twist your body. Only the arm moves.' },
+
+  { id: 'underfront', g: 'shoulders', name: 'Underhand Front Raise', also: 'Front shoulders, upper chest', sets: '4 × 10–12',
+    steps: ['Hold the dumbbells in front of your thighs, palms facing up.', 'Raise both straight ahead to shoulder height.', 'Lower slowly.'],
+    tip: 'Palms up shifts some work to the upper chest.' },
+
+  { id: 'ironcross', g: 'shoulders', name: 'Iron Cross Raise', also: 'Front and side shoulders', sets: '4 × 8',
+    steps: ['Raise both dumbbells straight in front to shoulder height.', 'Open your arms out to the sides, still at shoulder height.', 'Bring them back to the front, then lower.'],
+    tip: 'Light weights. Keep the dumbbells at shoulder height the whole time.' },
+
+  { id: 'uprpress', g: 'full', name: 'Upright Row to Press', also: 'Side shoulders, traps, triceps', sets: '4 × 8',
+    steps: ['Dumbbells in front of your thighs, palms facing you.', 'Pull them up into an upright row to chest height.', 'Flip them to your shoulders, press overhead, then reverse back down.'],
+    tip: 'Move smoothly. Use the weight you can press, not the weight you can row.' },
+
+  { id: 'curl', g: 'biceps', name: 'Standing Dumbbell Curl', also: 'Biceps', sets: '4 × 10–12',
+    steps: ['Dumbbells at your sides, palms facing forward.', 'Curl both up to your shoulders with your elbows pinned.', 'Lower slowly all the way down.'],
+    tip: 'The classic curl. Full range, no swinging.' },
+
+  { id: 'platecurl', g: 'biceps', name: 'Plate Curl', also: 'Plate · Biceps, forearms', sets: '4 × 10–12',
+    steps: ['Hold one plate with both hands at the sides of the rim, arms down.', 'Curl it up to chest height with your elbows by your sides.', 'Lower slowly.'],
+    tip: 'Squeeze the rim hard. Your grip works too.' },
+
+  { id: 'crosscurl', g: 'biceps', name: 'Cross-Body Curl', also: 'Biceps', sets: '4 × 10 each arm',
+    steps: ['Dumbbells at your sides, palms facing forward.', 'Curl one dumbbell up and across toward the opposite shoulder.', 'Lower slowly and alternate arms.'],
+    tip: 'Palms stay up the whole way. That is what makes it different from the cross-body hammer curl.' },
+
+  { id: 'platetri', g: 'triceps', name: 'Plate Overhead Triceps Extension', also: 'Plate · Triceps', sets: '4 × 10–12',
+    steps: ['Hold one plate overhead with both hands, arms straight.', 'Lower it behind your head by bending only your elbows.', 'Straighten your arms back up.'],
+    tip: 'Elbows point forward and stay close to your head.' },
+
+  { id: 'stwristcurl', g: 'forearms', name: 'Standing Wrist Curl', also: 'Forearm flexors', sets: '4 × 15',
+    steps: ['Stand with your elbows by your sides, bent 90°, palms up.', 'Curl your wrists up as far as they go.', 'Lower slowly.'],
+    tip: 'Only your wrists move. Elbows stay pinned.' },
+
+  { id: 'stwristext', g: 'forearms', name: 'Standing Wrist Extension', also: 'Forearm extensors', sets: '4 × 15',
+    steps: ['Stand with your elbows by your sides, bent 90°, palms down.', 'Lift the backs of your hands up as far as they go.', 'Lower slowly.'],
+    tip: 'Go much lighter than the wrist curl. This side is weaker.' },
+
+  { id: 'heelwalk', g: 'legs', name: 'Heel Walk', also: 'Shins, ankles', sets: '4 × 30 sec',
+    steps: ['Hold the dumbbells at your sides and lift your toes off the floor.', 'Walk forward on your heels only.', 'Turn around and walk back.'],
+    tip: 'Short steps. Keep your toes up the whole time.' },
+
+  { id: 'uppercut', g: 'wacky', name: 'Dumbbell Uppercuts', also: 'Shoulders, biceps, cardio', sets: '4 × 30 sec',
+    steps: ['Hold light dumbbells at chest height, elbows bent.', 'Drive one fist up toward chin height, then the other.', 'Keep alternating quickly.'],
+    tip: 'Light dumbbells only. Turn slightly from the hips, not the back.' },
+
+  { id: 'btbshrug', g: 'back', name: 'Behind-the-Back Shrug', also: 'Traps', sets: '4 × 12–15',
+    steps: ['Hold the dumbbells behind your thighs, palms facing back.', 'Shrug your shoulders straight up toward your ears.', 'Lower slowly.'],
+    tip: 'Stand tall. The dumbbells stay close to your legs.' }
+];
+
+var BEGINNER = ['bentlat', 'neutralohp', 'xfront', 'underfront', 'curl', 'platecurl', 'crosscurl', 'platetri', 'stwristcurl', 'stwristext', 'heelwalk', 'uppercut', 'btbshrug', 'plfront', 'halo', 'busdriver', 'plpress', 'plupright', 'pltwist', 'plohhold', 'svend', 'lowhigh', 'seesaw', 'scarecrow', 'latiso', 'frontiso', 'widecurl', 'closecurl', 'isocurl', 'btbwrist', 'radial', 'ulnar', 'wristrot', 'finger', 'march', 'rack', 'kneeraise', 'tib', 'slcalf', 'calfvar', 'ohpunch', 'circles', 'squeeze', 'fly', 'lateral', 'front', 'shrug', 'supcurl', 'hammer', 'revcurl', 'farmer', 'ohext', 'calf', 'twist', 'plhold', 'plshrug', 'plbrace', 'dragcurl', 'tiptoe', 'boxing'];
+var level = 'all';
+
+/* One how-to video per exercise: [YouTube id, channel]. Every exercise has one. */
+var VIDEOS = {
+  scott: ['H8F9E76qp_k', 'Tim Liu Fitness'],
+  sixway: ['pZyc0kVIjOw', 'Functional AF'],
+  bentlat: ['c_97VMFg0tQ', 'OriGym'],
+  neutralohp: ['00bjCsQz25A', 'Dr. Allan Bacon'],
+  xfront: ['TsLF5DiWthg', 'Physion Dynamics'],
+  underfront: ['lHOcOamE9gc', 'ilovefitnessDOTCOM'],
+  ironcross: ['X3pqrs0PHyI', 'Ageless Warrior Fitness'],
+  uprpress: ['LCZqgfoUUzE', 'Cleaver Health & Fitness'],
+  curl: ['6DeLZ6cbgWQ', 'Chris McCarthy'],
+  platecurl: ['i1AkTNCulKQ', 'FITASTIC'],
+  crosscurl: ['asbKz42fLqg', 'Jase Stuart'],
+  platetri: ['p_Gl2TJF5fI', 'Rehab My Patient'],
+  stwristcurl: ['fCbEAUg9jKQ', 'ATLASTHETICS'],
+  stwristext: ['qiMQ6bZY3Qo', 'Dr. Joel Seedman'],
+  heelwalk: ['edYFuhaff7c', 'runnersfeedsite'],
+  uppercut: ['wTOWu3lLm88', 'Side Quest Fitness'],
+  btbshrug: ['Mpx3xUe3sfQ', 'ilovefitnessDOTCOM'],
+  pllat: ['W4uIAPLaR2Q', 'Dr. Joel Seedman'],
+  plfront: ['Elm7yBLdYUM', 'FITBODY with Julie Lohre'],
+  halo: ['ymCcWUFUfng', 'OriGym'],
+  busdriver: ['25g1bRCOoHc', 'Criticalbench'],
+  plpress: ['oojfwleszBU', 'VTS Performance'],
+  plupright: ['wG1tUbPWVHU', 'EKEEH Fitness'],
+  plhammer: ['cynIss9vJec', 'OriGym'],
+  pltwist: ['roCTE5_JDLE', 'Performance360'],
+  plohhold: ['pzWVXEdABFg', 'NorCal Strength and Conditioning'],
+  svend: ['7J8pLwyy_eM', 'Osamoje'],
+  lowhigh: ['HYVqvhoAjGA', 'SET FOR SET'],
+  seesaw: ['jZfal3KVPDw', 'OriGym'],
+  lu: ['-TxJ157Lj5w', 'Vita Cors'],
+  scarecrow: ['__SLTFbXSmM', 'Fitway Workout Trainer'],
+  latiso: ['290DPNfdW50', 'Pitt Strength and Conditioning'],
+  frontiso: ['ybMN8ZZMKwE', 'LionStrong Exercise Vault'],
+  atw: ['7FYVO57z_ns', 'Vivian Ngo'],
+  yraise: ['l8wqDx3H_JU', 'Marzrodie'],
+  ohshrug: ['in4kU57YDJY', 'Fitway Workout Trainer'],
+  widecurl: ['bgXCiBT4rOo', 'A Double Dose'],
+  closecurl: ['8j44-5hfKKA', 'Chris McCarthy'],
+  isocurl: ['10T4-2c6108', 'Seattle Fire Department'],
+  c21: ['G3V5mlQAsts', 'Brandon Taft'],
+  hammerpress: ['uYYc5GK4-eM', 'Live Lean TV'],
+  pinchcurl: ['hyDjji3vKko', 'Salt-Tea Grip'],
+  saext: ['AYwg-h6LfM0', 'Live Lean TV'],
+  btbwrist: ['3p1fnxRM6zI', 'Marc Gaudett'],
+  radial: ['P9etvUpeZAo', 'Rehab My Patient'],
+  ulnar: ['Ce3yFOO1Hjk', 'Rehab My Patient'],
+  wristrot: ['ci8OXH_VzUg', 'Bodyline Academy'],
+  finger: ['M486I1leUIA', 'The Climbing SIG'],
+  headpinch: ['2ltTTlGjDD0', 'The Fitness Academy'],
+  offset: ['ejzjyC6NkjM', 'Clear Cut Fitness'],
+  march: ['T8CUVlNGlK4', 'Lift With Michelle'],
+  rack: ['RoXR4dhtiD8', 'RPM Training Co'],
+  kneeraise: ['YUpeReHQl_w', 'Live Lean TV'],
+  ohmarch: ['mLFFuzXab9o', 'Evolve Flagstaff'],
+  tib: ['KjaKJmWb_fI', 'Clench Fitness'],
+  slcalf: ['lYfI9gd3A8o', 'Fitway Workout Trainer'],
+  calfvar: ['a-x_NR-ibos', 'Andrew Kwong'],
+  ohpunch: ['11LQeq3ve8Q', 'So Fit & Daflete'],
+  circles: ['W431lAeylOc', 'Fitway Workout Trainer'],
+  slpress: ['anzQ22WAMlU', 'Sara Norgeot'],
+  squeeze: ['Esg0M2uc_3o', 'Lift With Michelle'],
+  fly: ['f87gTYyiffs', 'Your House Fitness'],
+  ohp: ['Did01dFR3Lk', 'Bobby Maximus'],
+  lateral: ['ssAo_xwFt5c', 'Brendan Wong'],
+  front: ['zkP0MsTcIVU', 'PureGym'],
+  arnold: ['ris9tKqMwgU', 'ATHLEAN-X'],
+  upright: ['SO_nHq52a8o', 'Bodybuilding.com'],
+  shrug: ['8lP_eJvClSA', 'Bodybuilding.com'],
+  supcurl: ['ae33ZFxyweU', 'Resolve Performance'],
+  zottman: ['RiwNqRqNzb8', 'Katie Orlic'],
+  hammer: ['zC3nLlEvin4', 'Scott Herman Fitness'],
+  xbody: ['JzNxtFpbiCQ', 'Functional Muscle Fitness'],
+  revcurl: ['Fi4ywH_M-Ac', 'OriGym'],
+  farmer: ['8OtwXwrJizk', 'PureGym'],
+  ohext: ['dsRbS_em7D8', 'Live Lean TV'],
+  calf: ['wxwY7GXxL4k', 'Bodybuilding.com'],
+  ohhold: ['MGgR85aE2DU', 'Horizon High Performance'],
+  plhold: ['8OtwXwrJizk', 'PureGym'],
+  plpinch: ['UAEEyglVogw', 'Travis Tarrant'],
+  plshrug: ['dKUB6MOB908', 'FITASTIC'],
+  plbrace: ['P8iSOHX73FE', 'Dr. Carl Baird'],
+  twist: ['XtDfTc_BhKE', 'Fitway Workout Trainer'],
+  dragcurl: ['5PdEraHkF1A', 'My PT Hub'],
+  thruster: ['tJP-fwf5ASA', 'J2FIT'],
+  curlpress: ['fJv_e-PR4Gk', 'Catalyst Athletics'],
+  cuban: ['kHTADPGB9oI', 'Live Lean TV'],
+  boxing: ['2gnCz755Z2I', 'Fighting Fit'],
+  tiptoe: ['-ivz0mNbi_E', 'SHIFT Movement Science'],
+  oneleg: ['Xbncvp9Qrjk', 'Fit For Business'],
+};
+
+function watchHtml(id) {
+  var v = VIDEOS[id];
+  if (!v) return '';
+  return '<div><a class="watch" href="https://www.youtube.com/watch?v=' + v[0] + '" target="_blank" rel="noopener noreferrer">▶ Watch how<small>' + v[1] + '</small></a></div>';
+}
+
+var DEFAULT_PINS = ['ohext', 'hammer', 'supcurl', 'revcurl'];
+var FIRST = ['ohext', 'hammer', 'supcurl', 'revcurl'];
+var lastItems = [];
+function isPlate(e) { return /plate/i.test(e.also); }
+var pins = new Set(DEFAULT_PINS);
+try {
+  var raw = localStorage.getItem('standlift.pins');
+  if (raw) pins = new Set(JSON.parse(raw));
+} catch (e) {}
+function savePins() {
+  try { localStorage.setItem('standlift.pins', JSON.stringify(Array.from(pins))); } catch (e) {}
+}
+
+var filter = 'all';
+var openId = null;
+var groupById = {};
+GROUPS.forEach(function (g) { groupById[g.id] = g; });
+
+function chipHtml(id, label, color, count) {
+  return '<button class="chip c-' + color + '" data-chip="' + id + '" aria-pressed="' + (filter === id) + '">' +
+    label + '<small>' + count + '</small></button>';
+}
+
+function render() {
+  var html = chipHtml('all', 'All', 'all', EX.length) +
+    chipHtml('pins', '★ My picks', 'all', pins.size) +
+    chipHtml('plates', '⬤ Plates', 'yellow', EX.filter(isPlate).length);
+  GROUPS.forEach(function (g) {
+    var n = EX.filter(function (e) { return e.g === g.id; }).length;
+    if (n) html += chipHtml(g.id, g.name, g.c, n);
+  });
+  document.getElementById('chips').innerHTML = html;
+
+
+  var items = EX.filter(function (e) {
+    if (filter === 'all') return true;
+    if (filter === 'pins') return pins.has(e.id);
+    if (filter === 'plates') return isPlate(e);
+    return e.g === filter;
+  });
+  items.sort(function (a, b) {
+    var ia = FIRST.indexOf(a.id), ib = FIRST.indexOf(b.id);
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+  });
+  lastItems = items;
+  document.getElementById('count').textContent = items.length + (items.length === 1 ? ' exercise' : ' exercises');
+
+  if (!items.length) {
+    document.getElementById('list').innerHTML = '<div class="empty">Nothing pinned yet. Tap the star on any exercise to add it here.</div>';
+    return;
+  }
+
+  document.getElementById('list').innerHTML = items.map(function (e) {
+    var g = groupById[e.g];
+    var isOpen = openId === e.id;
+    var pinned = pins.has(e.id);
+    var steps = e.steps.map(function (s) { return '<li>' + s + '</li>'; }).join('');
+    var fi = FIRST.indexOf(e.id);
+    return '<article class="card c-' + g.c + (fi !== -1 ? ' first' : '') + '">' +
+      '<div class="head">' +
+        '<button class="toggle" data-toggle="' + e.id + '" aria-expanded="' + isOpen + '">' +
+          (fi !== -1 ? '<span class="first-tag">Do first · ' + (fi + 1) + ' of 4</span>' : '') +
+          '<span class="name">' + e.name + '</span>' +
+          '<span class="meta">' + g.name + ' · ' + e.also + '</span>' +
+          '<span class="headsets">' + e.sets + '</span>' +
+        '</button>' +
+        '<button class="star" data-star="' + e.id + '" aria-pressed="' + pinned + '" aria-label="' + (pinned ? 'Unpin ' : 'Pin ') + e.name + '">' + (pinned ? '★' : '☆') + '</button>' +
+      '</div>' +
+      (isOpen ? '<div class="body"><span class="sets">' + e.sets + '</span>' + watchHtml(e.id) + '<ol>' + steps + '</ol><div class="tip"><b>Tip</b>' + e.tip + '</div></div>' : '') +
+    '</article>';
+  }).join('');
+}
+
+document.addEventListener('click', function (ev) {
+  if (ev.target.closest('#random')) {
+    var pool = lastItems.length ? lastItems : EX;
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    if (pool.length > 1) { while (pick.id === openId) pick = pool[Math.floor(Math.random() * pool.length)]; }
+    openId = pick.id; render();
+    var card = document.querySelector('[data-toggle="' + pick.id + '"]');
+    if (card) card.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  var chip = ev.target.closest('[data-chip]');
+  if (chip) { filter = chip.getAttribute('data-chip'); openId = null; render(); return; }
+  var star = ev.target.closest('[data-star]');
+  if (star) {
+    var id = star.getAttribute('data-star');
+    if (pins.has(id)) pins.delete(id); else pins.add(id);
+    savePins(); render(); return;
+  }
+  var tog = ev.target.closest('[data-toggle]');
+  if (tog) {
+    var tid = tog.getAttribute('data-toggle');
+    openId = openId === tid ? null : tid;
+    render();
+  }
+});
+
+render();
+</script>
+
+</body>
+</html>
